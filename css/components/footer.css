@@ -1,0 +1,104 @@
+/* -------------------------------------------------
+   -------- Footer Container Section ----------
+-------------------------------------------------- */
+
+.footer-container {
+    background-color: black;
+    color: white;
+    padding-top: 65px;
+    padding-bottom: 55px;
+    margin-top: 30px;
+}
+
+.footer-row-1 {
+    height: 310px;
+    display: grid;
+    grid-template-columns: 2fr 3fr 3fr 3fr;
+    padding: 0 35px;
+}
+
+.social-media-links {
+    padding: 15px 15px 15px 15px;
+}
+
+.website-logo-white-container {
+    padding-bottom: 20px;
+}
+.website-logo-white {
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+}
+
+.social-media-icons-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    justify-content: left;
+    align-items: center;
+    row-gap: 15px;
+    column-gap: 2px;
+}
+
+.link-item {
+    width: 60%;
+    height: 60%;
+    object-fit: contain;
+    border-radius: 100%;
+}
+
+.footer-list-container {
+    padding-top: 10px;
+}
+
+.main-button {
+    background-color: black;
+    color: white;
+    border: none;
+    padding-bottom: 20px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.footer-list {
+    list-style: none;
+    margin: 0;
+    padding: 5px;
+}
+.footer-list-item {
+    padding-bottom: 10px;
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+    font-size: 14px;
+}
+
+.experience-div {
+    height: 26px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mobile-logo {
+    height: 80%;
+    object-fit: contain;
+}
+
+.app-links-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.google-play {
+    margin-right: 5px;
+}
+.app-store {
+    margin-left: 5px;
+}
+
+.app-links {
+    height: 52px;
+}
