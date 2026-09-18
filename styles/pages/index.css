@@ -192,9 +192,15 @@
     position: relative;
     overflow: hidden;
 }
+.product-images-wrapper {
+    display: flex;
+    transition: transform 0.5s ease;
+}
 .product-img {
     width: 100%;
     display: block;
+    flex: 0 0 100%;
+    flex-shrink: 0;
 }
 .addtocart-button {
     position: absolute;

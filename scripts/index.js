@@ -12,7 +12,11 @@ function renderProducts() {
         <div class="product-card">
             <div class="product-img-wrapper">
               <div class="img-relative-wrapper" data-product-sku="${sku}">
-                <img class="product-img js-product-img" src="${images[0]}" alt="img">
+                <div class="product-images-wrapper js-product-images-wrapper">
+                    ${images.map(image => `
+                        <img class="product-img js-product-img" src="${image}" alt="img">
+                    `).join('')}
+                </div>
                 <button class="addtocart-button js-addtocart-button">
                   ADD TO CART
                 </button>
@@ -82,13 +86,14 @@ document.querySelectorAll('.js-scroll-right-button')
             const productSku = Number(rightButton.parentElement.dataset.productSku);
             const product = products.find(product => product.sku === productSku);
 
-            product.imageIndex += 1;
-            if(product.imageIndex === product.images.length) {
-                product.imageIndex = 0;
-            }
+            product.imageIndex = Math.min(3, product.imageIndex + 1);
 
-            const image = rightButton.parentElement.querySelector('.js-product-img');
-            image.setAttribute('src', product.images[product.imageIndex]);
+            const imagesWrapper =
+                rightButton.parentElement
+                    .querySelector('.js-product-images-wrapper');
+
+            imagesWrapper.style.transform =
+                `translateX(-${product.imageIndex * 100}%)`;
         });
     });
 
@@ -98,13 +103,14 @@ document.querySelectorAll('.js-scroll-left-button')
             const productSku = Number(leftButton.parentElement.dataset.productSku);
             const product = products.find(product => product.sku === productSku);
 
-            product.imageIndex -= 1;
-            if(product.imageIndex === -1) {
-                product.imageIndex = product.images.length - 1;
-            }
+            product.imageIndex = Math.max(0, product.imageIndex - 1);
 
-            const image = leftButton.parentElement.querySelector('.js-product-img');
-            image.setAttribute('src', product.images[product.imageIndex]);
+            const imagesWrapper =
+                leftButton.parentElement
+                    .querySelector('.js-product-images-wrapper');
+
+            imagesWrapper.style.transform =
+                `translateX(-${product.imageIndex * 100}%)`;
         });
     });
 
