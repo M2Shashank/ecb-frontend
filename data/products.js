@@ -11,7 +11,7 @@ export const products = [{
     imageIndex: 0,
     gender: 'Male',
     priceRs: 2499,
-    discount: 20,
+    afterPriceRs: 1999,
     availableSizes: [
         'XS', 'S', 'M', 'XL'
     ],
@@ -34,7 +34,7 @@ export const products = [{
     imageIndex: 0,
     gender: 'Female',
     priceRs: 2499,
-    discount: 20,
+    afterPriceRs: 1999,
     availableSizes: [
         'XS', 'S', 'M', 'XL'
     ],
@@ -57,7 +57,7 @@ export const products = [{
     imageIndex: 0,
     gender: 'Male',
     priceRs: 2499,
-    discount: 20,
+    afterPriceRs: 1999,
     availableSizes: [
         'XS', 'S', 'M', 'L', 'XL', 'XXL'
     ],
@@ -80,7 +80,7 @@ export const products = [{
     imageIndex: 0,
     gender: 'Female',
     priceRs: 2499,
-    discount: 20,
+    afterPriceRs: 1999,
     availableSizes: [
         'XS', 'S', 'M', 'L', 'XL', 'XXL'
     ],
@@ -103,7 +103,7 @@ export const products = [{
     imageIndex: 0,
     gender: 'Male',
     priceRs: 1999,
-    discount: 10,
+    afterPriceRs: 1799,
     availableSizes: [
         'XS', 'S', 'M', 'L', 'XL'
     ],
@@ -126,7 +126,7 @@ export const products = [{
     imageIndex: 0,
     gender: 'Female',
     priceRs: 1999,
-    discount: 10,
+    afterPriceRs: 1799,
     availableSizes: [
         'XS', 'S', 'M', 'L', 'XL'
     ],
@@ -149,7 +149,7 @@ export const products = [{
     imageIndex: 0,
     gender: 'Female',
     priceRs: 1299,
-    discount: 23,
+    afterPriceRs: 999,
     availableSizes: [
         'XS', 'S', 'M', 'L', 'XL', 'XXL'
     ],
@@ -172,7 +172,7 @@ export const products = [{
     imageIndex: 0,
     gender: 'Male',
     priceRs: 2499,
-    discount: 8,
+    afterPriceRs: 2299,
     availableSizes: [
         'XS', 'S', 'M', 'L', 'XL', 'XXL'
     ],
@@ -195,7 +195,7 @@ export const products = [{
     imageIndex: 0,
     gender: 'Female',
     priceRs: 2499,
-    discount: 8,
+    afterPriceRs: 2299,
     availableSizes: [
         'XS', 'S', 'M', 'L', 'XL', 'XXL'
     ],
@@ -218,7 +218,7 @@ export const products = [{
     imageIndex: 0,
     gender: 'Female',
     priceRs: 1299,
-    discount: 23,
+    afterPriceRs: 999,
     availableSizes: [
         'XS', 'S', 'M', 'L', 'XL', 'XXL'
     ],
@@ -241,7 +241,7 @@ export const products = [{
     imageIndex: 0,
     gender: 'Male',
     priceRs: 2299,
-    discount: 13,
+    afterPriceRs: 1999,
     availableSizes: [
         'M', 'L', 'XL', 'XXL'
     ],
@@ -264,7 +264,7 @@ export const products = [{
     imageIndex: 0,
     gender: 'Female',
     priceRs: 2299,
-    discount: 13,
+    afterPriceRs: 1999,
     availableSizes: [
         'M', 'L', 'XL', 'XXL'
     ],
@@ -287,7 +287,7 @@ export const products = [{
     imageIndex: 0,
     gender: 'Male',
     priceRs: 2999,
-    discount: 17,
+    afterPriceRs: 2499,
     availableSizes: [
         'S', 'M', 'L', 'XL', 'XXL'
     ],
@@ -310,7 +310,7 @@ export const products = [{
     imageIndex: 0,
     gender: 'Male',
     priceRs: 1299,
-    discount: 23,
+    afterPriceRs: 999,
     availableSizes: [
         'XS', 'S', 'M', 'L', 'XL', 'XXL'
     ],
@@ -333,7 +333,7 @@ export const products = [{
     imageIndex: 0,
     gender: 'Male',
     priceRs: 1299,
-    discount: 15,
+    afterPriceRs: 1099,
     availableSizes: [
         'XS', 'S', 'M', 'L'
     ],
