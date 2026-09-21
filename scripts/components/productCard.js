@@ -1,23 +1,24 @@
 import {addToCart, getCartQuantity} from '../../data/cart.js';
-import {addToWishlist, getWishlistIndex} from '../../data/wishList.js';
+import {inWishlist, modifyWishlist} from '../../data/wishList.js';
+import {addToRecentlyViewed} from '../../data/recentlyViewed.js';
 import {products} from '../../data/products.js';
 
 export function addListenersToProductCard() {
     document.querySelectorAll('.js-wishlist-heart-icon')
         .forEach((wishlistIcon) => {
             wishlistIcon.addEventListener('click', () => {
-                const productSku = wishlistIcon.parentElement.dataset.productSku;
+                const productSku = Number(wishlistIcon.parentElement.dataset.productSku);
+                const product = products.find(product => product.sku === productSku);
 
-                const wishlistItemIndex = getWishlistIndex(productSku);
+                modifyWishlist(productSku);
+
                 let imagePath = '';
-                if(wishlistItemIndex !== -1) {
-                    imagePath = "assets/main-assets/heartEmpty_icon.svg";
-                }else {
+                if(inWishlist(product.sku)) {
                     imagePath = "assets/main-assets/heartFilled_icon.svg";
+                }else {
+                    imagePath = "assets/main-assets/heartEmpty_icon.svg";
                 }
                 wishlistIcon.setAttribute('src', imagePath);
-
-                addToWishlist(productSku);
             });
         });
 
@@ -60,9 +61,8 @@ export function addListenersToProductCard() {
             button.addEventListener('click', () => {
                 const productSku = button.parentElement.dataset.productSku;
                 const product = products.find(product => product.sku === Number(productSku));
-                console.log(product);
+                
                 const size = product.availableSizes[0];
-                console.log(size);
                 addToCart(product.sku, size);
 
                 const cartQuantity = getCartQuantity();
@@ -70,4 +70,24 @@ export function addListenersToProductCard() {
                     .innerHTML = cartQuantity;
             });
         });
+
+    document.querySelectorAll('.js-img-relative-wrapper')
+    .forEach((element) => {
+        element.addEventListener('click', (event) => {
+            const productSku = element.dataset.productSku;
+            if (
+                event.target.closest('.js-addtocart-button') ||
+                event.target.closest('.js-scroll-right-button') ||
+                event.target.closest('.js-scroll-left-button')
+            ) {
+                return;
+            }
+
+            addToRecentlyViewed(productSku);
+
+            window.open(
+                `product.html?productSku=${productSku}`, '_blank'
+            );
+        });
+    });
 }

@@ -2,6 +2,7 @@ import {recentlyViewedProducts as viewedProducts} from '../data/recentlyViewed.j
 import {products} from '../data/products.js';
 import {cart, getCartValue, getCartQuantity, addToCart, removeFromCart} from '../data/cart.js';
 import {addListenersToProductCard} from './components/productCard.js';
+import {inWishlist} from '../data/wishList.js';
 
 
 function renderCartItems()  {
@@ -109,51 +110,50 @@ function setListenersToCartItem() {
         });
 }
 
-
-
-
-
-
-
 function renderViewedList() {
     let viewedProductsHTML = ``;
-    viewedProducts.forEach((sku) => {
-        let product = products.find(product => product.sku === sku);
-
+    viewedProducts.forEach((viewedItem) => {
+        const itemSku = viewedItem.itemSku;
+        let product = products.find(product => product.sku === itemSku);
+        
         const {images, name, priceRs, afterPriceRs} = product;
         const discount = (((priceRs - afterPriceRs)/priceRs)*100).toFixed(0);
+
+        let wishlistImage = '';
+        if(inWishlist(itemSku)) {
+            wishlistImage = "../assets/main-assets/heartFilled_icon.svg";
+        }else {
+            wishlistImage = "../assets/main-assets/heartEmpty_icon.svg";
+        }
 
         viewedProductsHTML += `
         <div class="product-card">
             <div class="product-img-wrapper">
-              <div class="img-relative-wrapper" data-product-sku="${sku}">
+                <div class="img-relative-wrapper js-img-relative-wrapper" data-product-sku="${itemSku}">
                 <div class="product-images-wrapper js-product-images-wrapper">
                     <img class="product-img js-product-img" src="${images[0]}" alt="img">
                 </div>
                 <button class="addtocart-button js-addtocart-button">
-                  ADD TO CART
+                    ADD TO CART
                 </button>
-              </div>
+                </div>
             </div>
             <div class="product-name">
-              ${name.toUpperCase()}
+                ${name.toUpperCase()}
             </div>
             <div class="product-price">
-              <del class="original-price">
+                <del class="original-price">
                 <span class="old-amount">Rs.${(priceRs).toFixed(2)}</span>
-              </del>
-              <ins class="discounted-price">
+                </del>
+                <ins class="discounted-price">
                 <span class="new-amount">Rs.${afterPriceRs}</span>
-              </ins>
+                </ins>
             </div>
-            <div class="wishlist-icon" data-product-sku="${sku}">
-              <img class="heart-icon js-wishlist-heart-icon" src="assets/main-assets/heartEmpty_icon.svg" alt="w">
-              <!---
-              <img class="heart-icon" src="assets/main-assets/heartFilled_icon.svg" alt="w">
-              -->
+            <div class="wishlist-icon" data-product-sku="${itemSku}">
+                <img class="heart-icon js-wishlist-heart-icon" src="${wishlistImage}" alt="w">
             </div>
             <div class="discount-alert">
-              SAVE ${discount}%
+                SAVE ${discount}%
             </div>
         </div>
         `

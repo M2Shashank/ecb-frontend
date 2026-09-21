@@ -9,7 +9,9 @@ function renderHeader() {
 		<div class="menu-list-item"> ACCESSORIES </div>
 		</div>
 		<div class="website-logo-container">
-		<img class="website-logo" src="assets/header-assets/Bonkers_Websitelogo.png" alt="Logo">
+			<a class="header-logo-link" href="/">
+				<img class="website-logo" src="assets/header-assets/Bonkers_Websitelogo.png" alt="Logo">
+			</a>
 		</div>
 		<div class="user-icons-container">
 		<div class="search-box-container">

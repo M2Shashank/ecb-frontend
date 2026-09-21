@@ -1,20 +1,30 @@
-export const wishlist = [];
+import {products} from './products.js';
+export let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [{
+    productSku: 11
+}];
 
-export function getWishlistIndex(productSku) {
-    let wishlistItemIndex = -1;
-    wishlist.forEach((wishlistItem, index) => {
-        if(wishlistItem.productSku === productSku) {
-            wishlistItemIndex = index;
-        }
-    })
-    return wishlistItemIndex;
+function saveToStorage() {
+    localStorage.setItem('wishlist', JSON.stringify(wishlist));
 }
 
-export function addToWishlist(productSku) {
-    const wishlistItemIndex = getWishlistIndex(productSku);
+export function inWishlist(sku) {
+    const item = wishlist.find(item => item.productSku === sku)
+    return Boolean(item);
+}
 
-    if(wishlistItemIndex !== -1) {
-        wishlist.splice(wishlistItemIndex, 1);
+export function modifyWishlist(productSku) {
+    const product = products.find(product => product.sku === productSku);
+
+    if(inWishlist(product.sku)) {
+        const newList = [];
+        wishlist.forEach(item => {
+            if(item.productSku === productSku) {
+                return;
+            }
+
+            newList.push(item);
+        })
+        wishlist = newList;
         console.log('removed from wishlist');
     }else {
         wishlist.push({
@@ -22,5 +32,7 @@ export function addToWishlist(productSku) {
         });
         console.log('Added to wishlist');
     }
+
+    saveToStorage();
     console.log(wishlist);
 }
