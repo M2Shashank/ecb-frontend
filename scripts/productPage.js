@@ -5,8 +5,8 @@ import {addToCart, getCartQuantity} from '../data/cart.js';
 import {addListenersToProductCard} from './components/productCard.js';
 import {genRecomendations, genRecentlyViewed} from './components/suggestions.js';
 
-const urlParams = new URLSearchParams(window.location.search);
-const sku = Number(urlParams.get('productSku'));
+const url = new URL(window.location.href);
+const sku = Number(url.searchParams.get('productSku'));
 let selectedSize = undefined;
 let selectedImage = undefined;
 let scrollInterval;
