@@ -1,9 +1,7 @@
-import {recentlyViewedProducts as viewedProducts} from '../data/recentlyViewed.js';
-import {products} from '../data/products.js';
+import { products } from '../data/products.js';
 import {cart, getCartValue, getCartQuantity, addToCart, removeFromCart} from '../data/cart.js';
 import {addListenersToProductCard} from './components/productCard.js';
-import {inWishlist} from '../data/wishList.js';
-
+import {genRecentlyViewed} from './components/suggestions.js'
 
 function renderCartItems()  {
     let cartItemsHTML = ``;
@@ -92,7 +90,7 @@ function setListenersToCartItem() {
                 removeFromCart(sku, size);
                 renderCartContent();
 
-                document.querySelector('.js-cart-items-count').innerText = getCartQuantity();
+                document.querySelector('.js-header-cart-items-count').innerText = getCartQuantity();
             });
         });
 
@@ -105,67 +103,16 @@ function setListenersToCartItem() {
                 addToCart(sku, size);
                 renderCartContent();
 
-                document.querySelector('.js-cart-items-count').innerText = getCartQuantity();
+                document.querySelector('.js-header-cart-items-count').innerText = getCartQuantity();
             });
         });
-}
-
-function renderViewedList() {
-    let viewedProductsHTML = ``;
-    viewedProducts.forEach((viewedItem) => {
-        const itemSku = viewedItem.itemSku;
-        let product = products.find(product => product.sku === itemSku);
-        
-        const {images, name, priceRs, afterPriceRs} = product;
-        const discount = (((priceRs - afterPriceRs)/priceRs)*100).toFixed(0);
-
-        let wishlistImage = '';
-        if(inWishlist(itemSku)) {
-            wishlistImage = "../assets/main-assets/heartFilled_icon.svg";
-        }else {
-            wishlistImage = "../assets/main-assets/heartEmpty_icon.svg";
-        }
-
-        viewedProductsHTML += `
-        <div class="product-card">
-            <div class="product-img-wrapper">
-                <div class="img-relative-wrapper js-img-relative-wrapper" data-product-sku="${itemSku}">
-                <div class="product-images-wrapper js-product-images-wrapper">
-                    <img class="product-img js-product-img" src="${images[0]}" alt="img">
-                </div>
-                <button class="addtocart-button js-addtocart-button">
-                    ADD TO CART
-                </button>
-                </div>
-            </div>
-            <div class="product-name">
-                ${name.toUpperCase()}
-            </div>
-            <div class="product-price">
-                <del class="original-price">
-                <span class="old-amount">Rs.${(priceRs).toFixed(2)}</span>
-                </del>
-                <ins class="discounted-price">
-                <span class="new-amount">Rs.${afterPriceRs}</span>
-                </ins>
-            </div>
-            <div class="wishlist-icon" data-product-sku="${itemSku}">
-                <img class="heart-icon js-wishlist-heart-icon" src="${wishlistImage}" alt="w">
-            </div>
-            <div class="discount-alert">
-                SAVE ${discount}%
-            </div>
-        </div>
-        `
-    });
-    return viewedProductsHTML;
 }
 
 function renderSuggestions() {
     const viewedHTML = `
     <div class="recently-viewed-heading">Recently viewed products</div>
     <div class="recently-viewed-products">
-        ${renderViewedList()}
+        ${genRecentlyViewed()}
     </div>
     `;
 

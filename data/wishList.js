@@ -1,4 +1,5 @@
-import {products} from './products.js';
+import { products } from './products.js';
+
 export let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [{
     productSku: 11
 }];
@@ -35,4 +36,14 @@ export function modifyWishlist(productSku) {
 
     saveToStorage();
     console.log(wishlist);
+}
+
+export function getWishlistIconPath(sku) {
+    let wishlistImage = '';
+    if(inWishlist(sku)) {
+        wishlistImage = "assets/main-assets/heartFilled_icon.svg";
+    }else {
+        wishlistImage = "assets/main-assets/heartEmpty_icon.svg";
+    }
+    return wishlistImage;
 }

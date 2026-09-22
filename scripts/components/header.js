@@ -31,7 +31,7 @@ function renderHeader() {
 			<div class="cart-icon-container">
 				<a class="cart-page-link" href="cart.html" target="_blank">
 					<img class="cart-icon-header" src="assets/header-assets/cart-icon.png" alt="cart">
-					<span class="cart-items-count js-cart-items-count">
+					<span class="cart-items-count js-header-cart-items-count">
 						${getCartQuantity()}
 					</span>
 				</a>

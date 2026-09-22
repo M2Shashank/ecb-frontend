@@ -1,7 +1,65 @@
 import {addToCart, getCartQuantity} from '../../data/cart.js';
-import {inWishlist, modifyWishlist} from '../../data/wishList.js';
+import {getWishlistIconPath, modifyWishlist} from '../../data/wishList.js';
 import {addToRecentlyViewed} from '../../data/recentlyViewed.js';
 import {products} from '../../data/products.js';
+
+export function genProductCard(product, imagesPresent = true) {
+    const {images, name, priceRs, afterPriceRs, sku} = product;
+    const discount = (((priceRs - afterPriceRs)/priceRs)*100).toFixed(0);
+
+    const wishlistImage = getWishlistIconPath(sku);
+
+    const imagesHTML = imagesPresent 
+        ? images.map(image => `
+                <img class="product-img js-product-img" src="${image}" alt="img">
+            `).join('')
+        :  `<img class="product-img js-product-img" src="${images[0]}" alt="img"></img>`;
+
+    const productCardHTML = `
+        <div class="product-card">
+          <div class="product-img-wrapper">
+            <div class="img-relative-wrapper js-img-relative-wrapper" data-product-sku="${sku}">
+                <div class="product-images-wrapper js-product-images-wrapper">
+                    ${imagesHTML}
+                </div>
+                <button class="addtocart-button js-addtocart-button">
+                    ADD TO CART
+                </button>
+                ${imagesPresent ?   `
+                <button class="scroll-right-button js-scroll-right-button">
+                    <svg class="arrow-head" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 8L14 12L10 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="scroll-left-button js-scroll-left-button">
+                    <svg class="arrow-head" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 8L10 12L14 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                `   : ` `}
+            </div>
+          </div>
+          <div class="product-name">
+              ${name.toUpperCase()}
+          </div>
+          <div class="product-price">
+              <del class="original-price">
+                <span class="old-amount">Rs.${(priceRs).toFixed(2)}</span>
+              </del>
+              <ins class="discounted-price">
+                <span class="new-amount">Rs.${afterPriceRs}</span>
+              </ins>
+          </div>
+          <div class="wishlist-icon" data-product-sku="${sku}">
+              <img class="heart-icon js-wishlist-heart-icon" src="${wishlistImage}" alt="w">
+          </div>
+          <div class="discount-alert">
+              SAVE ${discount}%
+          </div>
+        </div>
+        `
+    return productCardHTML;
+}
 
 export function addListenersToProductCard() {
     document.querySelectorAll('.js-wishlist-heart-icon')
@@ -12,12 +70,7 @@ export function addListenersToProductCard() {
 
                 modifyWishlist(productSku);
 
-                let imagePath = '';
-                if(inWishlist(product.sku)) {
-                    imagePath = "assets/main-assets/heartFilled_icon.svg";
-                }else {
-                    imagePath = "assets/main-assets/heartEmpty_icon.svg";
-                }
+                const imagePath = getWishlistIconPath(product.sku);
                 wishlistIcon.setAttribute('src', imagePath);
             });
         });
