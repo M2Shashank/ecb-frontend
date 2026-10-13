@@ -2,9 +2,18 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './Header.css'
 import { asset } from '../utils/assets'
+import { getAuthenticatedUser, isAuthenticated, logoutUser } from '../utils/auth'
 
 function Header({ cartQuantity }) {
   const [search, setSearch] = useState('')
+  const [showLoginNotice, setShowLoginNotice] = useState(false)
+  const [showAccountMenu, setShowAccountMenu] = useState(false)
+  const [logoutError, setLogoutError] = useState('')
+  const authenticated = isAuthenticated()
+  const user = getAuthenticatedUser()
+  const initials = user?.username
+    ? user.username.slice(0, 2).toUpperCase()
+    : user?.email?.slice(0, 2).toUpperCase() || 'U'
 
   return (
     <header className="site-header">
@@ -32,8 +41,33 @@ function Header({ cartQuantity }) {
             </button>
           </form>
           <div className="user-icons">
+            {authenticated ? (
+              <div className="profile-menu">
+                <button className="profile-initials" type="button" onClick={() => setShowAccountMenu(!showAccountMenu)} aria-label="Open account menu">
+                  {initials}
+                </button>
+                {showAccountMenu && (
+                  <div className="account-menu">
+                    <span className="account-menu-user">{user?.username || user?.email || 'Signed in'}</span>
+                    <button type="button" onClick={async () => {
+                      try {
+                        await logoutUser()
+                        setShowAccountMenu(false)
+                        window.location.reload()
+                      } catch (error) {
+                        setLogoutError(error.message)
+                      }
+                    }}>LOG OUT</button>
+                    {logoutError && <span className="account-menu-error">{logoutError}</span>}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link className="header-icon-button" to="/auth" aria-label="Profile">
+                <img src={asset('header-assets/profile-icon.png')} alt="" />
+              </Link>
+            )}
             {[
-              ['profile-icon.png', 'Profile'],
               ['wishlist-icon.png', 'Wishlist'],
               ['store-icon.png', 'Store locator'],
             ].map(([icon, label]) => (
@@ -41,13 +75,29 @@ function Header({ cartQuantity }) {
                 <img src={asset(`header-assets/${icon}`)} alt="" />
               </button>
             ))}
-            <Link className="cart-icon-container" to="/cart" aria-label={`Cart, ${cartQuantity} items`}>
+            <Link
+              className="cart-icon-container"
+              to="/cart"
+              onClick={(event) => {
+                if (!authenticated) {
+                  event.preventDefault()
+                  setShowLoginNotice(true)
+                }
+              }}
+              aria-label={`Cart, ${cartQuantity} items`}
+            >
               <img src={asset('header-assets/cart-icon.png')} alt="" />
               <span className="cart-items-count">{cartQuantity}</span>
             </Link>
           </div>
         </div>
       </nav>
+      {showLoginNotice && (
+        <div className="cart-login-notice" role="alert">
+          <span>Please log in to view your cart.</span>
+          <button type="button" onClick={() => setShowLoginNotice(false)} aria-label="Close notification">×</button>
+        </div>
+      )}
     </header>
   )
 }

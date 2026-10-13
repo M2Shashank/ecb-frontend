@@ -1,10 +1,10 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ProductCard from '../components/ProductCard'
-import { products } from '../../data/products.js'
 import './HomePage.css'
 import { asset } from '../utils/assets'
+import { getProducts } from '../utils/productsApi'
 
 function getInitialCart() {
   try {
@@ -15,15 +15,36 @@ function getInitialCart() {
 }
 
 function HomePage() {
+  const [products, setProducts] = useState([])
   const [cartQuantity, setCartQuantity] = useState(getInitialCart)
   const [sort, setSort] = useState('featured')
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    let mounted = true
+    getProducts()
+      .then((nextProducts) => {
+        if (mounted) setProducts(nextProducts)
+      })
+      .catch((requestError) => {
+        if (mounted) setError(requestError.message)
+      })
+      .finally(() => {
+        if (mounted) setLoading(false)
+      })
+    return () => {
+      mounted = false
+    }
+  }, [])
+
   const sortedProducts = useMemo(() => {
     const result = [...products]
     if (sort === 'price-lth') result.sort((a, b) => a.afterPriceRs - b.afterPriceRs)
     if (sort === 'price-htl') result.sort((a, b) => b.afterPriceRs - a.afterPriceRs)
     if (sort === 'best-selling') result.reverse()
     return result
-  }, [sort])
+  }, [products, sort])
 
   const addToCart = (product) => {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]')
@@ -65,7 +86,9 @@ function HomePage() {
             </div>
           </div>
           <div className="products-grid">
-            {sortedProducts.map((product) => <ProductCard product={product} onAddToCart={addToCart} key={product.sku} />)}
+            {loading && <p>Loading products...</p>}
+            {!loading && error && <p role="alert">{error}</p>}
+            {!loading && !error && sortedProducts.map((product) => <ProductCard product={product} onAddToCart={addToCart} key={product.sku} />)}
           </div>
         </section>
       </main>

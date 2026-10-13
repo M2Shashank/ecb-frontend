@@ -8,11 +8,12 @@ function ProductCard({ product, onAddToCart }) {
   const [imageIndex, setImageIndex] = useState(0)
   const [wishlisted, setWishlisted] = useState(product.inWishlist)
   const discount = Math.round(((product.priceRs - product.afterPriceRs) / product.priceRs) * 100)
+  const productId = product.backendId || product._id
 
   return (
-    <article className="product-card">
+    <article className="product-card" data-product-id={productId}>
       <div className="product-img-wrapper">
-        <div className="img-relative-wrapper" onClick={() => navigate(`/product/${product.sku}`)} onKeyDown={(event) => event.key === 'Enter' && navigate(`/product/${product.sku}`)} role="link" tabIndex={0}>
+        <div className="img-relative-wrapper" onClick={() => navigate(`/product/${productId}`)} onKeyDown={(event) => event.key === 'Enter' && navigate(`/product/${productId}`)} role="link" tabIndex={0}>
           <div className="product-images-wrapper" style={{ transform: `translateX(-${imageIndex * 100}%)` }}>
             {product.images.map((image) => (
               <img className="product-img" src={asset(image)} alt={product.name} key={image} />

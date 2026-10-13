@@ -5,6 +5,7 @@ const assetFiles = import.meta.glob('../assets/**/*', {
 })
 
 export function asset(path) {
+  if (/^(https?:)?\/\//.test(path)) return path
   const normalizedPath = path.replace(/^assets\//, '')
   const file = assetFiles[`../assets/${normalizedPath}`]
   if (!file) {

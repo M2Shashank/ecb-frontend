@@ -1,0 +1,138 @@
+.auth-main {
+  display: flex;
+  min-height: 560px;
+  margin-top: 93px;
+  padding: 70px 20px;
+  justify-content: center;
+  align-items: flex-start;
+  background: #f7f7f7;
+}
+
+.auth-card {
+  width: min(100%, 460px);
+  padding: 38px 42px 44px;
+  background: #fff;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .08);
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 32px;
+  border-bottom: 1px solid #d7d7d7;
+}
+
+.auth-tabs button {
+  padding: 0 0 14px;
+  color: #777;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.auth-tabs button.active {
+  color: #111;
+  border-bottom-color: #111;
+}
+
+.auth-card h1 {
+  margin: 0 0 8px;
+  color: #111;
+  font-size: 30px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.auth-intro {
+  margin: 0 0 28px;
+  color: #666;
+  font-size: 15px;
+  text-align: center;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.auth-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.auth-form input {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid #c9c9c9;
+  outline: none;
+  font-size: 15px;
+}
+
+.auth-form input:focus {
+  border-color: #111;
+}
+
+.auth-submit {
+  height: 48px;
+  margin-top: 5px;
+  color: #fff;
+  background: #111;
+  border: 1px solid #111;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .8px;
+  cursor: pointer;
+}
+
+.auth-submit:hover {
+  color: #111;
+  background: #fff;
+}
+
+.auth-submit:disabled {
+  cursor: wait;
+  opacity: .6;
+}
+
+.auth-error {
+  margin: 18px 0 0;
+  color: #b3261e;
+  font-size: 14px;
+  text-align: center;
+}
+
+.auth-message {
+  margin: 18px 0 0;
+  color: #247342;
+  font-size: 14px;
+  text-align: center;
+}
+
+.auth-home-link {
+  display: block;
+  margin-top: 24px;
+  color: #555;
+  font-size: 14px;
+  text-align: center;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 560px) {
+  .auth-main {
+    padding: 40px 15px;
+  }
+
+  .auth-card {
+    padding: 30px 22px 34px;
+  }
+}
