@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import './Header.css'
 import { asset } from '../utils/assets'
 
@@ -13,9 +14,9 @@ function Header({ cartQuantity }) {
             <a className="menu-list-item" href="/" key={item}>{item}</a>
           ))}
         </div>
-        <a className="header-logo-link" href="/" aria-label="Bonkers Corner home">
+        <Link className="header-logo-link" to="/" aria-label="Bonkers Corner home">
           <img className="website-logo" src={asset('header-assets/Bonkers_Websitelogo.png')} alt="Bonkers Corner" />
-        </a>
+        </Link>
         <div className="user-icons-container">
           <form className="search-box-container" onSubmit={(event) => event.preventDefault()}>
             <input
@@ -40,10 +41,10 @@ function Header({ cartQuantity }) {
                 <img src={asset(`header-assets/${icon}`)} alt="" />
               </button>
             ))}
-            <a className="cart-icon-container" href="/cart.html" aria-label={`Cart, ${cartQuantity} items`}>
+            <Link className="cart-icon-container" to="/cart" aria-label={`Cart, ${cartQuantity} items`}>
               <img src={asset('header-assets/cart-icon.png')} alt="" />
               <span className="cart-items-count">{cartQuantity}</span>
-            </a>
+            </Link>
           </div>
         </div>
       </nav>

@@ -10,6 +10,7 @@
 .img-relative-wrapper {
   position: relative;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .product-images-wrapper {

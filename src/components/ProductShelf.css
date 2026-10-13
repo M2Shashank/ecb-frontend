@@ -1,0 +1,33 @@
+.product-shelf {
+  margin-top: 75px;
+}
+
+.product-shelf h2 {
+  margin: 0;
+  padding: 75px 0 30px;
+  color: #484f56;
+  font-size: 34px;
+  font-weight: 600;
+}
+
+.product-shelf-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.product-shelf-grid .product-card {
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .product-shelf-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .product-shelf h2 {
+    padding-top: 45px;
+    font-size: 26px;
+  }
+}
