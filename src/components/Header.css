@@ -113,12 +113,18 @@
   position: relative;
 }
 
+.profile-button {
+  position: relative;
+}
+
 .profile-initials {
+  position: absolute;
+  top: 0;
+  right: 0;
   display: grid;
-  min-width: 18px;
-  height: 18px;
-  margin: 0 11px;
-  padding: 0 3px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 2px;
   place-items: center;
   color: #fff;
   background: #111;

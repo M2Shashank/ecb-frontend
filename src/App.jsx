@@ -5,8 +5,10 @@ import HomePage from './pages/HomePage'
 import ProductPage from './pages/ProductPage'
 import AuthPage from './pages/AuthPage'
 import OrdersPage from './pages/OrdersPage'
-import { isAuthenticated } from './utils/auth'
+import { isAuthenticated, subscribeAuth } from './utils/auth'
 import { getProducts } from './utils/productsApi'
+import { getWishlistIds } from './utils/wishlistApi'
+import { useSyncExternalStore } from 'react'
 
 function ProtectedCartRoute({ products }) {
   return isAuthenticated() ? <CartPage products={products} /> : <HomePage products={products} />
@@ -21,12 +23,20 @@ function AppContent() {
   const [products, setProducts] = useState([])
   const [loadedSearch, setLoadedSearch] = useState(null)
   const [error, setError] = useState('')
+  const authenticated = useSyncExternalStore(subscribeAuth, isAuthenticated, () => false)
   const search = new URLSearchParams(location.search).get('search') || ''
 
   useEffect(() => {
-    getProducts(search)
-      .then((nextProducts) => {
-        setProducts(nextProducts)
+    Promise.all([
+      getProducts(search),
+      authenticated ? getWishlistIds() : Promise.resolve([]),
+    ])
+      .then(([nextProducts, wishlistIds]) => {
+        const wishlist = new Set(wishlistIds)
+        setProducts(nextProducts.map((product) => ({
+          ...product,
+          inWishlist: wishlist.has(product.backendId),
+        })))
         setLoadedSearch(search)
         setError('')
       })
@@ -34,7 +44,7 @@ function AppContent() {
         setLoadedSearch(search)
         setError(requestError.message)
       })
-  }, [search])
+  }, [search, authenticated])
 
   const loading = loadedSearch !== search
   if (loading) return <p>Loading products...</p>

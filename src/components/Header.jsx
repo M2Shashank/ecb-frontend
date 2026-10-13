@@ -1,14 +1,16 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import './Header.css'
 import { asset } from '../utils/assets'
 import { getAuthenticatedUser, isAuthenticated, logoutUser, subscribeAuth } from '../utils/auth'
+import { getCart } from '../utils/cartApi'
 import { useSyncExternalStore } from 'react'
 
 function Header({ cartQuantity }) {
   const location = useLocation()
   const navigate = useNavigate()
   const [search, setSearch] = useState(() => new URLSearchParams(location.search).get('search') || '')
+  const [userCartQuantity, setUserCartQuantity] = useState(cartQuantity)
   const [showLoginNotice, setShowLoginNotice] = useState(false)
   const [showAccountMenu, setShowAccountMenu] = useState(false)
   const [logoutError, setLogoutError] = useState('')
@@ -17,6 +19,15 @@ function Header({ cartQuantity }) {
   const initials = user?.username
     ? user.username.slice(0, 2).toUpperCase()
     : user?.email?.slice(0, 2).toUpperCase() || 'U'
+
+  useEffect(() => {
+    if (!authenticated) return
+    getCart()
+      .then((cart) => setUserCartQuantity(cart.items.reduce((total, item) => total + item.quantity, 0)))
+      .catch(() => setUserCartQuantity(0))
+  }, [authenticated])
+
+  const displayedCartQuantity = authenticated ? userCartQuantity : 0
 
   const searchProducts = (event) => {
     event.preventDefault()
@@ -52,8 +63,9 @@ function Header({ cartQuantity }) {
           <div className="user-icons">
             {authenticated ? (
               <div className="profile-menu">
-                <button className="profile-initials" type="button" onClick={() => setShowAccountMenu(!showAccountMenu)} aria-label="Open account menu">
-                  {initials}
+                <button className="header-icon-button profile-button" type="button" onClick={() => setShowAccountMenu(!showAccountMenu)} aria-label="Open account menu">
+                  <img src={asset('header-assets/profile-icon.png')} alt="" />
+                  <span className="profile-initials">{initials}</span>
                 </button>
                 {showAccountMenu && (
                   <div className="account-menu">
@@ -94,10 +106,10 @@ function Header({ cartQuantity }) {
                   setShowLoginNotice(true)
                 }
               }}
-              aria-label={`Cart, ${cartQuantity} items`}
+              aria-label={`Cart, ${displayedCartQuantity} items`}
             >
               <img src={asset('header-assets/cart-icon.png')} alt="" />
-              <span className="cart-items-count">{cartQuantity}</span>
+              <span className="cart-items-count">{displayedCartQuantity}</span>
             </Link>
           </div>
         </div>

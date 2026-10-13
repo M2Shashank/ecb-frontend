@@ -9,6 +9,7 @@ import { addCartItem, getCart } from '../utils/cartApi'
 import { isAuthenticated } from '../utils/auth'
 import { getProduct } from '../utils/productsApi'
 import { createProductOrder } from '../utils/orderApi'
+import { addToWishlist, getWishlistIds, removeFromWishlist } from '../utils/wishlistApi'
 import './ProductPage.css'
 
 function ProductPage({ products }) {
@@ -36,7 +37,13 @@ function ProductPage({ products }) {
         setProduct(nextProduct)
         setSelectedSize(nextProduct.availableSizes[0] || '')
         setSelectedImage(nextProduct.images[0] || '')
-        setWishlisted(Boolean(nextProduct.inWishlist))
+        if (isAuthenticated()) {
+          getWishlistIds()
+            .then((wishlistIds) => setWishlisted(wishlistIds.includes(nextProduct.backendId)))
+            .catch(() => setWishlisted(false))
+        } else {
+          setWishlisted(false)
+        }
       })
       .catch((requestError) => {
         if (mounted) setError(requestError.message)
@@ -150,7 +157,11 @@ function ProductPage({ products }) {
                   window.alert('Please log in to manage your wishlist.')
                   return
                 }
-                setWishlisted(!wishlisted)
+                const nextWishlisted = !wishlisted
+                const request = nextWishlisted ? addToWishlist : removeFromWishlist
+                request(product.backendId)
+                  .then(() => setWishlisted(nextWishlisted))
+                  .catch((requestError) => setError(requestError.message))
               }} aria-label="Toggle wishlist">
                 <img className="display-heart-icon" src={asset(`assets/main-assets/${wishlisted ? 'heartFilled_icon.svg' : 'heartEmpty_icon.svg'}`)} alt="" />
               </button>

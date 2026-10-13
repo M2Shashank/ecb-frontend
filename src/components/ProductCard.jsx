@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import './ProductCard.css'
 import { asset } from '../utils/assets'
 import { isAuthenticated } from '../utils/auth'
+import { addToWishlist, removeFromWishlist } from '../utils/wishlistApi'
 
 function ProductCard({ product, onAddToCart }) {
   const navigate = useNavigate()
@@ -51,7 +52,11 @@ function ProductCard({ product, onAddToCart }) {
           window.alert('Please log in to manage your wishlist.')
           return
         }
-        setWishlisted(!wishlisted)
+        const nextWishlisted = !wishlisted
+        const request = nextWishlisted ? addToWishlist : removeFromWishlist
+        request(productId)
+          .then(() => setWishlisted(nextWishlisted))
+          .catch((error) => setCartStatus(error.message))
       }} aria-label="Toggle wishlist">
         <img className="heart-icon" src={asset(`assets/main-assets/${wishlisted ? 'heartFilled_icon.svg' : 'heartEmpty_icon.svg'}`)} alt="" />
       </button>
