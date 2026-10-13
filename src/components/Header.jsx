@@ -2,14 +2,15 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './Header.css'
 import { asset } from '../utils/assets'
-import { getAuthenticatedUser, isAuthenticated, logoutUser } from '../utils/auth'
+import { getAuthenticatedUser, isAuthenticated, logoutUser, subscribeAuth } from '../utils/auth'
+import { useSyncExternalStore } from 'react'
 
 function Header({ cartQuantity }) {
   const [search, setSearch] = useState('')
   const [showLoginNotice, setShowLoginNotice] = useState(false)
   const [showAccountMenu, setShowAccountMenu] = useState(false)
   const [logoutError, setLogoutError] = useState('')
-  const authenticated = isAuthenticated()
+  const authenticated = useSyncExternalStore(subscribeAuth, isAuthenticated, () => false)
   const user = getAuthenticatedUser()
   const initials = user?.username
     ? user.username.slice(0, 2).toUpperCase()

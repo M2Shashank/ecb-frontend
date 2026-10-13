@@ -7,7 +7,7 @@ function resolveImageUrl(path) {
   return `${API_ORIGIN}${path.startsWith('/') ? path : `/${path}`}`
 }
 
-function mapProduct(product, index) {
+export function mapProduct(product, index = 0) {
   return {
     ...product,
     backendId: product._id,

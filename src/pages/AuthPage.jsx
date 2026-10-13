@@ -2,17 +2,8 @@ import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { loginUser, registerUser, setAuthenticatedUser, syncLocalDataAfterLogin } from '../utils/auth'
+import { loginUser, registerUser, setAuthenticatedUser } from '../utils/auth'
 import './AuthPage.css'
-
-function getCartQuantity() {
-  try {
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]')
-    return cart.reduce((total, item) => total + item.quantity, 0)
-  } catch {
-    return 0
-  }
-}
 
 function AuthPage() {
   const navigate = useNavigate()
@@ -56,7 +47,6 @@ function AuthPage() {
       const response = isSignup
         ? await registerUser(credentials)
         : await loginUser(credentials)
-      await syncLocalDataAfterLogin()
       setAuthenticatedUser(response.user)
       const destination = location.state?.from || '/'
       navigate(destination, { replace: true })
@@ -69,7 +59,7 @@ function AuthPage() {
 
   return (
     <div className="auth-page">
-      <Header cartQuantity={getCartQuantity()} />
+      <Header cartQuantity={0} />
       <main className="auth-main">
         <section className="auth-card" aria-labelledby="auth-title">
           <div className="auth-tabs" role="tablist" aria-label="Account actions">

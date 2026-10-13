@@ -40,6 +40,18 @@
   cursor: pointer;
 }
 
+.addtocart-button:disabled {
+  cursor: wait;
+  opacity: .7;
+}
+
+.cart-status-error {
+  display: block;
+  margin-top: 6px;
+  color: #b3261e;
+  font-size: 11px;
+}
+
 .img-relative-wrapper:hover .addtocart-button,
 .img-relative-wrapper:focus-within .addtocart-button {
   transform: translateY(0);

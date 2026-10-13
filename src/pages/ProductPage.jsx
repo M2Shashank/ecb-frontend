@@ -6,10 +6,11 @@ import ProductShelf from '../components/ProductShelf'
 import { sizeChart } from '../../data/sizeChart.js'
 import { asset } from '../utils/assets'
 import { addCartItem, getCart } from '../utils/cartApi'
+import { isAuthenticated } from '../utils/auth'
 import { getProduct } from '../utils/productsApi'
 import './ProductPage.css'
 
-function ProductPage() {
+function ProductPage({ products }) {
   const { productId } = useParams()
   const [product, setProduct] = useState(null)
   const [cartQuantity, setCartQuantity] = useState(0)
@@ -18,6 +19,11 @@ function ProductPage() {
   const [wishlisted, setWishlisted] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [addingToCart, setAddingToCart] = useState(false)
+  const [addedToCart, setAddedToCart] = useState(false)
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+  }, [productId])
 
   useEffect(() => {
     let mounted = true
@@ -40,10 +46,6 @@ function ProductPage() {
     }
   }, [productId])
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
-  }, [productId])
-
   const measurements = useMemo(() => {
     if (!product || !selectedSize || !sizeChart[product.category]) return null
     return sizeChart[product.category][selectedSize]
@@ -55,11 +57,20 @@ function ProductPage() {
   }
 
   const addProductToCart = async () => {
+    if (!isAuthenticated()) {
+      window.alert('Please log in to add items to your cart.')
+      return
+    }
     try {
+      setAddingToCart(true)
       await addCartItem(product, selectedSize)
       await updateCartQuantity()
+      setAddedToCart(true)
+      setError('')
     } catch (requestError) {
       setError(requestError.message)
+    } finally {
+      setAddingToCart(false)
     }
   }
 
@@ -105,7 +116,13 @@ function ProductPage() {
           <div className="information-section">
             <div className="display-product-container">
               <h1 className="display-product-name">{product.name}</h1>
-              <button className="display-wishlist-icon" type="button" onClick={() => setWishlisted(!wishlisted)} aria-label="Toggle wishlist">
+              <button className="display-wishlist-icon" type="button" onClick={() => {
+                if (!isAuthenticated()) {
+                  window.alert('Please log in to manage your wishlist.')
+                  return
+                }
+                setWishlisted(!wishlisted)
+              }} aria-label="Toggle wishlist">
                 <img className="display-heart-icon" src={asset(`assets/main-assets/${wishlisted ? 'heartFilled_icon.svg' : 'heartEmpty_icon.svg'}`)} alt="" />
               </button>
             </div>
@@ -119,14 +136,15 @@ function ProductPage() {
                 })}
               </div>
             </div>
-            <button className="add-to-cart-button" type="button" onClick={addProductToCart}>ADD TO CART</button>
-            <button className="buy-it-now-button" type="button" onClick={addProductToCart}>BUY IT NOW</button>
+            <button className="add-to-cart-button" type="button" disabled={addingToCart} onClick={addProductToCart}>{addingToCart ? 'ADDING...' : addedToCart ? 'ADDED TO CART' : 'ADD TO CART'}</button>
+            <button className="buy-it-now-button" type="button" disabled={addingToCart} onClick={addProductToCart}>BUY IT NOW</button>
+            {error && <p role="alert">{error}</p>}
             <div className="product-description"><p>{product.description}</p></div>
             <div className="product-information"><p><b>Composition:</b> {product.composition || '-'}<br /><b>GSM:</b> {product.gsm || '-'}<br /><b>Color:</b> {product.color}<br /><b>Country of production:</b> India</p></div>
           </div>
         </section>
-        <ProductShelf product={product} type="related" onAddToCart={addProductToCart} />
-        <ProductShelf product={product} onAddToCart={addProductToCart} />
+        <ProductShelf products={products} product={product} type="related" onAddToCart={addProductToCart} />
+        <ProductShelf products={products} product={product} onAddToCart={addProductToCart} />
       </main>
       <Footer />
     </div>

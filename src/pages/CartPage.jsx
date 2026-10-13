@@ -4,10 +4,10 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ProductShelf from '../components/ProductShelf'
 import { asset } from '../utils/assets'
-import { addCartItem, getCart, getLocalProduct, updateCartItem } from '../utils/cartApi'
+import { addCartItem, getCart, updateCartItem } from '../utils/cartApi'
 import './CartPage.css'
 
-function CartPage() {
+function CartPage({ products }) {
   const [cart, setCart] = useState({ items: [], totalCost: 0 })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -75,7 +75,7 @@ function CartPage() {
               <p className="empty-cart">Your cart is empty.</p>
             )}
             {!loading && !error && cart.items.map((cartItem) => {
-              const product = getLocalProduct(cartItem)
+              const product = cartItem.product
               if (!product) return null
               const itemUpdating = updatingItemId === cartItem._id
               return (
@@ -114,7 +114,7 @@ function CartPage() {
           </div>
         </section>
 
-        <ProductShelf onAddToCart={addToCart} />
+        <ProductShelf products={products} onAddToCart={addToCart} />
       </main>
       <Footer />
     </div>

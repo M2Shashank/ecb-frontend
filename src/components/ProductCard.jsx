@@ -2,13 +2,34 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './ProductCard.css'
 import { asset } from '../utils/assets'
+import { isAuthenticated } from '../utils/auth'
 
 function ProductCard({ product, onAddToCart }) {
   const navigate = useNavigate()
   const [imageIndex, setImageIndex] = useState(0)
   const [wishlisted, setWishlisted] = useState(product.inWishlist)
+  const [cartStatus, setCartStatus] = useState('')
+  const [addingToCart, setAddingToCart] = useState(false)
   const discount = Math.round(((product.priceRs - product.afterPriceRs) / product.priceRs) * 100)
   const productId = product.backendId || product._id
+
+  const handleAddToCart = async (event) => {
+    event.stopPropagation()
+    if (!isAuthenticated()) {
+      window.alert('Please log in to add items to your cart.')
+      return
+    }
+    setAddingToCart(true)
+    setCartStatus('')
+    try {
+      await onAddToCart(product)
+      setCartStatus('ADDED')
+    } catch (error) {
+      setCartStatus(error.message)
+    } finally {
+      setAddingToCart(false)
+    }
+  }
 
   return (
     <article className="product-card" data-product-id={productId}>
@@ -19,12 +40,19 @@ function ProductCard({ product, onAddToCart }) {
               <img className="product-img" src={asset(image)} alt={product.name} key={image} />
             ))}
           </div>
-          <button className="addtocart-button" type="button" onClick={(event) => { event.stopPropagation(); onAddToCart(product) }}>ADD TO CART</button>
+          <button className="addtocart-button" type="button" disabled={addingToCart} onClick={handleAddToCart}>{addingToCart ? 'ADDING...' : cartStatus === 'ADDED' ? 'ADDED' : 'ADD TO CART'}</button>
           <button className="scroll-right-button" type="button" aria-label="Next product image" onClick={(event) => { event.stopPropagation(); setImageIndex(Math.min(product.images.length - 1, imageIndex + 1)) }}>›</button>
           <button className="scroll-left-button" type="button" aria-label="Previous product image" onClick={(event) => { event.stopPropagation(); setImageIndex(Math.max(0, imageIndex - 1)) }}>‹</button>
         </div>
+        {cartStatus && cartStatus !== 'ADDED' && <span className="cart-status-error" role="alert">{cartStatus}</span>}
       </div>
-      <button className="wishlist-icon" type="button" onClick={() => setWishlisted(!wishlisted)} aria-label="Toggle wishlist">
+      <button className="wishlist-icon" type="button" onClick={() => {
+        if (!isAuthenticated()) {
+          window.alert('Please log in to manage your wishlist.')
+          return
+        }
+        setWishlisted(!wishlisted)
+      }} aria-label="Toggle wishlist">
         <img className="heart-icon" src={asset(`assets/main-assets/${wishlisted ? 'heartFilled_icon.svg' : 'heartEmpty_icon.svg'}`)} alt="" />
       </button>
       <span className="discount-alert">SAVE {discount}%</span>
