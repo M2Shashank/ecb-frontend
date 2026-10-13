@@ -1,0 +1,118 @@
+.product-card {
+  position: relative;
+  margin: 0 15px;
+}
+
+.product-img-wrapper {
+  padding-bottom: 20px;
+}
+
+.img-relative-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.product-images-wrapper {
+  display: flex;
+  transition: transform .5s ease;
+}
+
+.product-img {
+  display: block;
+  width: 100%;
+  flex: 0 0 100%;
+}
+
+.addtocart-button {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 44px;
+  color: #fff;
+  background: rgba(0, 0, 0, .82);
+  border: 0;
+  font-size: 10px;
+  font-weight: 700;
+  transform: translateY(100%);
+  transition: transform .6s ease;
+  cursor: pointer;
+}
+
+.img-relative-wrapper:hover .addtocart-button,
+.img-relative-wrapper:focus-within .addtocart-button {
+  transform: translateY(0);
+}
+
+.scroll-right-button,
+.scroll-left-button {
+  position: absolute;
+  top: 40%;
+  width: 30px;
+  height: 30px;
+  color: #fff;
+  background: rgba(0, 0, 0, .75);
+  border: 0;
+  border-radius: 50%;
+  opacity: 0;
+  font-size: 24px;
+  line-height: 20px;
+  transition: opacity .3s ease;
+  cursor: pointer;
+}
+
+.scroll-right-button { right: 5px; }
+.scroll-left-button { left: 5px; }
+.img-relative-wrapper:hover button,
+.img-relative-wrapper:focus-within button { opacity: 1; }
+
+.product-name {
+  padding: 8px 0 5px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.original-price {
+  color: rgba(128, 128, 128, .5);
+  font-size: 15px;
+}
+
+.discounted-price {
+  padding-left: 10px;
+  color: #cf2929;
+  font-size: 15px;
+  text-decoration: none;
+}
+
+.wishlist-icon {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1;
+  width: 28px;
+  height: 28px;
+  padding: 6px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.heart-icon {
+  width: 100%;
+  height: 100%;
+}
+
+.discount-alert {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  height: 23px;
+  padding: 0 10px;
+  color: #fff;
+  background: #cf2929;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 600;
+}
