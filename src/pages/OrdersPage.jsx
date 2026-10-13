@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { asset } from '../utils/assets'
 import { getOrders } from '../utils/orderApi'
 import './OrdersPage.css'
 
@@ -73,7 +72,7 @@ function OrdersPage() {
                       {item.product?.images?.[0] && (
                         <img
                           className="order-item-image"
-                          src={asset(item.product.images[0])}
+                          src={item.product.images[0]}
                           alt={item.product.name}
                         />
                       )}

@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ProductShelf from '../components/ProductShelf'
-import { asset } from '../utils/assets'
 import { addCartItem, getCart, updateCartItem } from '../utils/cartApi'
 import { createOrder } from '../utils/orderApi'
 import './CartPage.css'
@@ -97,7 +96,7 @@ function CartPage({ products }) {
                 <article className="cart-item" key={cartItem._id}>
                   <div className="item-description">
                     <div className="item-image-container">
-                      <img className="item-image" src={asset(product.images[0])} alt={product.name} />
+                      <img className="item-image" src={product.images[0]} alt={product.name} />
                     </div>
                     <div className="item-details">
                       <span className="item-name">{product.name}</span>

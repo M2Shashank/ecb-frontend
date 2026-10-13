@@ -38,7 +38,7 @@ function ProductCard({ product, onAddToCart }) {
         <div className="img-relative-wrapper" onClick={() => navigate(`/product/${productId}`)} onKeyDown={(event) => event.key === 'Enter' && navigate(`/product/${productId}`)} role="link" tabIndex={0}>
           <div className="product-images-wrapper" style={{ transform: `translateX(-${imageIndex * 100}%)` }}>
             {product.images.map((image) => (
-              <img className="product-img" src={asset(image)} alt={product.name} key={image} />
+              <img className="product-img" src={image} alt={product.name} key={image} />
             ))}
           </div>
           <button className="addtocart-button" type="button" disabled={addingToCart} onClick={handleAddToCart}>{addingToCart ? 'ADDING...' : cartStatus === 'ADDED' ? 'ADDED' : 'ADD TO CART'}</button>

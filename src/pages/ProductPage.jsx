@@ -141,13 +141,13 @@ function ProductPage({ products }) {
               <div className="thumbnail-container">
                 {product.images.map((image) => (
                   <button type="button" className={`thumbnail-button-image${selectedImage === image ? ' active' : ''}`} onClick={() => setSelectedImage(image)} key={image}>
-                    <img className="thumbnail" src={asset(image)} alt={`${product.name} view`} />
+                    <img className="thumbnail" src={image} alt={`${product.name} view`} />
                   </button>
                 ))}
               </div>
               <button type="button" className="thumbnail-button" aria-label="Next images">⌄</button>
             </div>
-            <div className="main-image-container"><img className="main-display-image" src={asset(selectedImage)} alt={product.name} /></div>
+            <div className="main-image-container"><img className="main-display-image" src={selectedImage} alt={product.name} /></div>
           </div>
           <div className="information-section">
             <div className="display-product-container">
