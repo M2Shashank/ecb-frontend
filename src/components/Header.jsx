@@ -1,12 +1,14 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import './Header.css'
 import { asset } from '../utils/assets'
 import { getAuthenticatedUser, isAuthenticated, logoutUser, subscribeAuth } from '../utils/auth'
 import { useSyncExternalStore } from 'react'
 
 function Header({ cartQuantity }) {
-  const [search, setSearch] = useState('')
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [search, setSearch] = useState(() => new URLSearchParams(location.search).get('search') || '')
   const [showLoginNotice, setShowLoginNotice] = useState(false)
   const [showAccountMenu, setShowAccountMenu] = useState(false)
   const [logoutError, setLogoutError] = useState('')
@@ -16,19 +18,25 @@ function Header({ cartQuantity }) {
     ? user.username.slice(0, 2).toUpperCase()
     : user?.email?.slice(0, 2).toUpperCase() || 'U'
 
+  const searchProducts = (event) => {
+    event.preventDefault()
+    const value = search.trim()
+    navigate(value ? `/?search=${encodeURIComponent(value)}` : '/')
+  }
+
   return (
     <header className="site-header">
       <nav className="header-grid" aria-label="Main navigation">
         <div className="menu-list">
-          {['WOMEN', 'MEN', 'ACCESSORIES'].map((item) => (
-            <a className="menu-list-item" href="/" key={item}>{item}</a>
+          {[['WOMEN', 'female'], ['MEN', 'male'], ['ACCESSORIES', 'accessories']].map(([label, searchValue]) => (
+            <Link className="menu-list-item" to={`/?search=${searchValue}`} onClick={() => setSearch(searchValue)} key={label}>{label}</Link>
           ))}
         </div>
-        <Link className="header-logo-link" to="/" aria-label="Bonkers Corner home">
+        <Link className="header-logo-link" to="/" onClick={() => setSearch('')} aria-label="Bonkers Corner home">
           <img className="website-logo" src={asset('header-assets/Bonkers_Websitelogo.png')} alt="Bonkers Corner" />
         </Link>
         <div className="user-icons-container">
-          <form className="search-box-container" onSubmit={(event) => event.preventDefault()}>
+          <form className="search-box-container" onSubmit={searchProducts}>
             <input
               className="search-box"
               type="search"
@@ -50,6 +58,7 @@ function Header({ cartQuantity }) {
                 {showAccountMenu && (
                   <div className="account-menu">
                     <span className="account-menu-user">{user?.username || user?.email || 'Signed in'}</span>
+                    <Link className="account-menu-link" to="/orders" onClick={() => setShowAccountMenu(false)}>ORDERS</Link>
                     <button type="button" onClick={async () => {
                       try {
                         await logoutUser()

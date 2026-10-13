@@ -152,14 +152,18 @@
   white-space: nowrap;
 }
 
-.account-menu button {
+.account-menu button,
+.account-menu-link {
+  display: grid;
   height: 32px;
+  place-items: center;
   color: #fff;
   background: #111;
   border: 1px solid #111;
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .account-menu-error {

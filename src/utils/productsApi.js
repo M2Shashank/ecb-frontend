@@ -22,8 +22,10 @@ export function mapProduct(product, index = 0) {
   }
 }
 
-export async function getProducts() {
-  const response = await api.get('/products/')
+export async function getProducts(search = '') {
+  const response = await api.get('/products', {
+    params: search ? { search } : undefined,
+  })
   return (response.data.products || []).map(mapProduct)
 }
 

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ProductShelf from '../components/ProductShelf'
@@ -8,10 +8,12 @@ import { asset } from '../utils/assets'
 import { addCartItem, getCart } from '../utils/cartApi'
 import { isAuthenticated } from '../utils/auth'
 import { getProduct } from '../utils/productsApi'
+import { createProductOrder } from '../utils/orderApi'
 import './ProductPage.css'
 
 function ProductPage({ products }) {
   const { productId } = useParams()
+  const navigate = useNavigate()
   const [product, setProduct] = useState(null)
   const [cartQuantity, setCartQuantity] = useState(0)
   const [selectedSize, setSelectedSize] = useState('')
@@ -21,6 +23,7 @@ function ProductPage({ products }) {
   const [error, setError] = useState('')
   const [addingToCart, setAddingToCart] = useState(false)
   const [addedToCart, setAddedToCart] = useState(false)
+  const [buyingNow, setBuyingNow] = useState(false)
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
   }, [productId])
@@ -61,6 +64,7 @@ function ProductPage({ products }) {
       window.alert('Please log in to add items to your cart.')
       return
     }
+
     try {
       setAddingToCart(true)
       await addCartItem(product, selectedSize)
@@ -71,6 +75,31 @@ function ProductPage({ products }) {
       setError(requestError.message)
     } finally {
       setAddingToCart(false)
+    }
+  }
+
+  const buyProductNow = async () => {
+    if (!isAuthenticated()) {
+      window.alert('Please log in to buy this product.')
+      return
+    }
+    const selectedSizeStock = product.sizes?.find(({ size }) => size === selectedSize)?.stock
+    const quantityInput = window.prompt(`How many would you like to order? Available stock: ${selectedSizeStock || 0}`, '1')
+    if (quantityInput === null) return
+    const quantity = Number(quantityInput)
+    if (!Number.isInteger(quantity) || quantity < 1 || quantity > selectedSizeStock) {
+      window.alert(`Please enter a whole number between 1 and ${selectedSizeStock || 0}.`)
+      return
+    }
+    try {
+      setBuyingNow(true)
+      setError('')
+      await createProductOrder(product.backendId, selectedSize, quantity)
+      navigate('/orders')
+    } catch (requestError) {
+      setError(requestError.message)
+    } finally {
+      setBuyingNow(false)
     }
   }
 
@@ -137,7 +166,7 @@ function ProductPage({ products }) {
               </div>
             </div>
             <button className="add-to-cart-button" type="button" disabled={addingToCart} onClick={addProductToCart}>{addingToCart ? 'ADDING...' : addedToCart ? 'ADDED TO CART' : 'ADD TO CART'}</button>
-            <button className="buy-it-now-button" type="button" disabled={addingToCart} onClick={addProductToCart}>BUY IT NOW</button>
+            <button className="buy-it-now-button" type="button" disabled={addingToCart || buyingNow} onClick={buyProductNow}>{buyingNow ? 'CREATING ORDER...' : 'BUY IT NOW'}</button>
             {error && <p role="alert">{error}</p>}
             <div className="product-description"><p>{product.description}</p></div>
             <div className="product-information"><p><b>Composition:</b> {product.composition || '-'}<br /><b>GSM:</b> {product.gsm || '-'}<br /><b>Color:</b> {product.color}<br /><b>Country of production:</b> India</p></div>

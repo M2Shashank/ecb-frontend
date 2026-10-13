@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ProductShelf from '../components/ProductShelf'
 import { asset } from '../utils/assets'
 import { addCartItem, getCart, updateCartItem } from '../utils/cartApi'
+import { createOrder } from '../utils/orderApi'
 import './CartPage.css'
 
 function CartPage({ products }) {
+  const navigate = useNavigate()
   const [cart, setCart] = useState({ items: [], totalCost: 0 })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [updatingItemId, setUpdatingItemId] = useState('')
+  const [placingOrder, setPlacingOrder] = useState(false)
 
   useEffect(() => {
     let mounted = true
@@ -49,6 +52,18 @@ function CartPage({ products }) {
       setCart(await addCartItem(product, product.availableSizes[0]))
     } catch (requestError) {
       setError(requestError.message)
+    }
+  }
+
+  const placeOrder = async () => {
+    try {
+      setPlacingOrder(true)
+      setError('')
+      await createOrder()
+      navigate('/orders')
+    } catch (requestError) {
+      setError(requestError.message)
+      setPlacingOrder(false)
     }
   }
 
@@ -109,7 +124,9 @@ function CartPage({ products }) {
                 <span className="cart-subtotal-amount">₹ {Number(cart.totalCost).toFixed(2)}</span>
               </div>
               <div className="other-information">Shipping, taxes, and discount codes calculated at checkout</div>
-              <button className="checkout-button" type="button">Check out</button>
+              <button className="checkout-button" type="button" disabled={placingOrder || cart.items.length === 0} onClick={placeOrder}>
+                {placingOrder ? 'PLACING ORDER...' : 'PLACE ORDER'}
+              </button>
             </div>
           </div>
         </section>
