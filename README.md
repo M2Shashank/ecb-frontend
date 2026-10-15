@@ -1,16 +1,38 @@
-# React + Vite
+# ECB Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The frontend for the ECB clothing storefront. It is built with React and Vite and provides product browsing, search, authentication, wishlist, cart, and order pages.
 
-Currently, two official plugins are available:
+## Requirements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Node.js 18 or newer
+- npm
+- The ECB backend running at `http://localhost:3000`
 
-## React Compiler
+The frontend sends API requests to `http://localhost:3000/api` and expects the
+backend to provide the authentication, product, wishlist, cart, and order
+endpoints used by the application.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Getting started
 
-## Expanding the ESLint configuration
+1. Install dependencies:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+   ```bash
+   npm install
+   ```
+
+2. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+3. Open the local URL printed by Vite, usually
+   `http://localhost:5173`.
+
+## Application routes
+
+- `/` - Browse products and search the catalogue
+- `/product/:productId` - View product details
+- `/auth` - Register or sign in
+- `/cart` - View and update the authenticated user's cart
+- `/orders` - View the authenticated user's orders
